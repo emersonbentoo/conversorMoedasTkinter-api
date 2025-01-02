@@ -1,5 +1,7 @@
 import customtkinter 
 from buscar_moedas import nomes_moedas, conversao_disponiveis
+from requisicao import buscar_cotacao
+
 customtkinter.set_appearance_mode("dark-blue")
 janela = customtkinter.CTk()
 janela.geometry("500x500")
@@ -20,10 +22,18 @@ moeda_origem = customtkinter.CTkOptionMenu(janela, values=list(dic_conversao_dis
 moeda_destino = customtkinter.CTkOptionMenu(janela,values=["Selecione moedas de origem"])
 
 def converter_moedas():
-    print("Converter Moedas")                                            
-botao_converter= customtkinter.CTkButton(janela,text="Converter",command="converter_moedas")                                            
+    origem= moeda_origem.get()
+    destino = moeda_destino.get()
+    if origem and destino:
+        cotacao = buscar_cotacao(origem,destino)
+        valor_cotacao.configure(text = f"1{origem} = {cotacao} {destino}")                                          
+
+botao_converter= customtkinter.CTkButton(janela,text="Converter",command=converter_moedas)                                            
 
 detalhe=customtkinter.CTkScrollableFrame(janela)
+
+
+valor_cotacao =customtkinter.CTkLabel(janela,text="")
 
 moedas_disponiveis = nomes_moedas()
 
@@ -41,5 +51,8 @@ moeda_origem.pack(padx=10)
 texto_moeda_destino.pack(padx=10)
 moeda_destino.pack(padx=10,pady=10)
 botao_converter.pack()
+valor_cotacao.pack(padx=10,pady=10)
 detalhe.pack(padx=10,pady=10)
+
+
 janela.mainloop()
