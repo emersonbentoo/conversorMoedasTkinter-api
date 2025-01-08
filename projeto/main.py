@@ -26,7 +26,11 @@ def converter_moedas():
     destino = moeda_destino.get()
     if origem and destino:
         cotacao = buscar_cotacao(origem,destino)
-        valor_cotacao.configure(text = f"1{origem} = {cotacao} {destino}")                                          
+        try:
+            cotacao_float = float(cotacao)
+            valor_cotacao.configure(text=f"1 {origem} = {cotacao_float:.2f} {destino}")
+        except ValueError:
+            valor_cotacao.configure(text="Erro: Cotação inválida.")
 
 botao_converter= customtkinter.CTkButton(janela,text="Converter",command=converter_moedas)                                            
 
